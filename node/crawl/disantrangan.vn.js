@@ -4,7 +4,7 @@ const fs = require('fs');
 
 const ignoreText = ['Tham khảo hình ảnh và công thức từ kênh YouTube PiTi Family'];
 
-async function dienmayxanhCom(url) {
+module.exports = async function disantranganVn(url) {
   try {
     const response = await axios.get(url);
     const html = response.data;
@@ -12,30 +12,11 @@ async function dienmayxanhCom(url) {
     const contentArray = [];
 
     // Remove unwanted elements
-    $('div.staple > h2 > small').remove();
-    $('div.rate-view').remove();
-    $('ul.ready').remove();
-    $('div.list-recipe').remove();
-    $('div.video').remove();
-    $('h1').remove();
-    $('b.tlt').remove();
-    $('div.boxpromote').remove();
-    $('div.infobox').remove();
-    $('div.txtAuthor').remove();
-    $('div.content-step').remove();
-    $('div.customerSurvey').remove();
-    $('div.food-similar').remove();
-    $('div.box-commentCook').remove();
-    $('div.infoprod').remove();
-    $('a.btn__noibat').remove();
 
     // Extract the content from the HTML using CSS selectors
-    $('div.detail-content').each((index, element) => {
+    $('div#ftwp-postcontent').each((index, element) => {
       const elementHtml = $(element).html();
-      const modifiedHtml1 = elementHtml.replace(/Điện máy XANH/gi, match => {
-        return match.replace(/Điện máy XANH/gi, '');
-      });
-      const modifiedHtml2 = modifiedHtml1.replace(/<a\b[^>]*>/gi, match => {
+      const modifiedHtml2 = elementHtml.replace(/<a\b[^>]*>/gi, match => {
         return match.replace(/href="[^"]*"/gi, '');
       });
       contentArray.push(`<${element.name}>${modifiedHtml2}</${element.name}>`);
@@ -50,6 +31,4 @@ async function dienmayxanhCom(url) {
     console.error('Error crawling content:', error);
     return null;
   }
-}
-
-module.exports = dienmayxanhCom;
+};

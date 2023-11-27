@@ -1,6 +1,9 @@
 const cheerio = require('cheerio');
 const axios = require('axios');
 const dienmayxanhCom = require('./crawl/dienmayxanh.com');
+const disantranganVn = require('./crawl/disantrangan.vn');
+const thucphamsieuthiVn = require('./crawl/thucphamsieuthi.vn');
+const daubepgiadinhVn = require('./crawl/daubepgiadinh.vn');
 
 async function getAllResultUrls(searchQuery) {
   const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`;
@@ -34,12 +37,24 @@ const crawl = async keywords => {
         data.push(await dienmayxanhCom(firstUrl));
         break;
       }
+      case firstUrl.includes('disantrangan.vn'): {
+        data.push(await disantranganVn(firstUrl));
+        break;
+      }
+      case firstUrl.includes('thucphamsieuthi.vn'): {
+        data.push(await thucphamsieuthiVn(firstUrl));
+        break;
+      }
+      case firstUrl.includes('daubepgiadinh.vn'): {
+        data.push(await daubepgiadinhVn(firstUrl));
+        break;
+      }
       default: {
-        return { keywords: iterator, content: 'Không tìm thấy' };
+        data.push({ keywords: iterator, content: 'Không tìm thấy', url: firstUrl });
       }
     }
-    return data;
   }
+  return data;
 };
 
 module.exports = crawl;
