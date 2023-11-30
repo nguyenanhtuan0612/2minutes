@@ -4,6 +4,7 @@ const dienmayxanhCom = require('./crawl/dienmayxanh.com');
 const disantranganVn = require('./crawl/disantrangan.vn');
 const thucphamsieuthiVn = require('./crawl/thucphamsieuthi.vn');
 const daubepgiadinhVn = require('./crawl/daubepgiadinh.vn');
+const { createPost } = require('./wpapi');
 
 async function getAllResultUrls(searchQuery) {
   const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`;
@@ -31,27 +32,34 @@ async function getAllResultUrls(searchQuery) {
 const crawl = async keywords => {
   const data = [];
   for (const iterator of keywords) {
-    const firstUrl = await getAllResultUrls(iterator);
-    switch (true) {
-      case firstUrl.includes('dienmayxanh.com'): {
-        data.push(await dienmayxanhCom(firstUrl));
-        break;
+    try {
+      const firstUrl = await getAllResultUrls(iterator);
+      switch (true) {
+        case firstUrl.includes('dienmayxanh.com'): {
+          data.push(await dienmayxanhCom(firstUrl));
+          break;
+        }
+        case firstUrl.includes('disantrangan.vn'): {
+          data.push(await disantranganVn(firstUrl));
+          break;
+        }
+        case firstUrl.includes('thucphamsieuthi.vn'): {
+          data.push(await thucphamsieuthiVn(firstUrl));
+          break;
+        }
+        case firstUrl.includes('daubepgiadinh.vn'): {
+          const content = await daubepgiadinhVn(firstUrl);
+          await createPost('https://daytiengnhat.edu.vn', 'admin', 'Ha2000$$$', 'Test', content);
+          data.push({ keywords: iterator, content: 'Cào thành công', url: firstUrl });
+          break;
+        }
+        default: {
+          data.push({ keywords: iterator, content: 'Không tìm thấy', url: firstUrl });
+        }
       }
-      case firstUrl.includes('disantrangan.vn'): {
-        data.push(await disantranganVn(firstUrl));
-        break;
-      }
-      case firstUrl.includes('thucphamsieuthi.vn'): {
-        data.push(await thucphamsieuthiVn(firstUrl));
-        break;
-      }
-      case firstUrl.includes('daubepgiadinh.vn'): {
-        data.push(await daubepgiadinhVn(firstUrl));
-        break;
-      }
-      default: {
-        data.push({ keywords: iterator, content: 'Không tìm thấy', url: firstUrl });
-      }
+    } catch (error) {
+      console.error('Error:', error);
+      data.push({ keywords: iterator, content: 'Không tìm thấy', url: 'Không tìm thấy' });
     }
   }
   return data;
