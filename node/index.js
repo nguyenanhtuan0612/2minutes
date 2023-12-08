@@ -4,6 +4,7 @@ const http = require('http');
 const crawl = require('./crawl');
 const bodyParser = require('body-parser');
 const { dbConnect } = require('./sequelize');
+const schedule = require('node-schedule');
 
 // setup the port our backend app will run on
 const PORT = 3000;
@@ -43,6 +44,12 @@ app.post('/addKeyword', async (req, res) => {
 app.delete('/deleteKeyword', async (req, res) => {
   const data = await crawl.deleteKeyword(req.query.id);
   return res.json(data);
+});
+
+schedule.scheduleJob('*/1 * * * *', async function () {
+  const data = await crawl.getNextKeyword();
+  console.log(data);
+  console.log('The answer to life, the universe, and everything!');
 });
 
 server.listen(PORT, async () => {

@@ -22,6 +22,22 @@ async function getAllResultUrls(searchQuery) {
   return resultUrls[0];
 }
 
+const getNextKeyword = async () => {
+  try {
+    const sites = await Site.findAll();
+    const keywords = [];
+    for (const site of sites) {
+      const keyword = await Keyword.findOne({ where: { siteId: site.id, done: false } });
+      if (keyword) {
+        keywords.push(keyword);
+      }
+    }
+    return keywords;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const crawl = async keyword => {
   try {
     const site = await Site.findOne({ where: { site } });
@@ -114,4 +130,4 @@ const deleteKeyword = async id => {
   }
 };
 
-module.exports = { crawl, addSite, listSite, updateSite, deleteSite, addKeyword, deleteKeyword };
+module.exports = { crawl, addSite, listSite, updateSite, deleteSite, addKeyword, deleteKeyword, getNextKeyword };
