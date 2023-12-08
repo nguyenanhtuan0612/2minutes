@@ -5,6 +5,8 @@ const disantranganVn = require('./crawl/disantrangan.vn');
 const thucphamsieuthiVn = require('./crawl/thucphamsieuthi.vn');
 const daubepgiadinhVn = require('./crawl/daubepgiadinh.vn');
 const { createPost } = require('./wpapi');
+const { Site } = require('./models/site');
+const { Keyword } = require('./models/keyword');
 
 async function getAllResultUrls(searchQuery) {
   const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`;
@@ -20,49 +22,96 @@ async function getAllResultUrls(searchQuery) {
   return resultUrls[0];
 }
 
-// const searchQuery = 'Hướng dẫn làm món đậu tương lên men';
-// getAllResultUrls(searchQuery)
-//   .then(urls => {
-//     console.log('All result URLs:', urls);
-//   })
-//   .catch(error => {
-//     console.error('Error:', error);
-//   });
+const crawl = async keyword => {
+  try {
+    const site = await Site.findOne({ where: { site } });
+    if (!site) throw new Error('Site not found');
 
-const crawl = async keywords => {
-  const data = [];
-  for (const iterator of keywords) {
-    try {
-      const firstUrl = await getAllResultUrls(iterator);
-      switch (true) {
-        case firstUrl.includes('dienmayxanh.com'): {
-          data.push(await dienmayxanhCom(firstUrl));
-          break;
-        }
-        case firstUrl.includes('disantrangan.vn'): {
-          data.push(await disantranganVn(firstUrl));
-          break;
-        }
-        case firstUrl.includes('thucphamsieuthi.vn'): {
-          data.push(await thucphamsieuthiVn(firstUrl));
-          break;
-        }
-        case firstUrl.includes('daubepgiadinh.vn'): {
-          const content = await daubepgiadinhVn(firstUrl);
-          await createPost('https://daytiengnhat.edu.vn', 'admin', 'Ha2000$$$', 'Test', content);
-          data.push({ keywords: iterator, content: 'Cào thành công', url: firstUrl });
-          break;
-        }
-        default: {
-          data.push({ keywords: iterator, content: 'Không tìm thấy', url: firstUrl });
-        }
+    const firstUrl = await getAllResultUrls(keyword);
+    switch (true) {
+      case firstUrl.includes('dienmayxanh.com'): {
+        const content = await dienmayxanhCom(firstUrl);
+        await createPost(site.site, site.username, site.password, 'Test', content);
+        return { keywords: keyword, content: 'Cào thành công', url: firstUrl };
       }
-    } catch (error) {
-      console.error('Error:', error);
-      data.push({ keywords: iterator, content: 'Không tìm thấy', url: 'Không tìm thấy' });
+      case firstUrl.includes('disantrangan.vn'): {
+        const content = await disantranganVn(firstUrl);
+        await createPost(site.site, site.username, site.password, 'Test', content);
+        return { keywords: keyword, content: 'Cào thành công', url: firstUrl };
+      }
+      case firstUrl.includes('thucphamsieuthi.vn'): {
+        const content = await thucphamsieuthiVn(firstUrl);
+        await createPost(site.site, site.username, site.password, 'Test', content);
+        return { keywords: keyword, content: 'Cào thành công', url: firstUrl };
+      }
+      case firstUrl.includes('daubepgiadinh.vn'): {
+        const content = await daubepgiadinhVn(firstUrl);
+        await createPost(site.site, site.username, site.password, 'Test', content);
+        return { keywords: keyword, content: 'Cào thành công', url: firstUrl };
+      }
+      default: {
+        return { keywords: keyword, content: 'Không tìm thấy', url: firstUrl };
+      }
     }
+  } catch (error) {
+    throw error;
   }
-  return data;
 };
 
-module.exports = crawl;
+const addSite = async (site, username, password) => {
+  try {
+    const newSite = await Site.create({ site, username, password });
+    return newSite;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const listSite = async offset => {
+  try {
+    const sites = await Site.findAll({ offset, limit: 10 });
+    return sites;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const updateSite = async (id, site, username, password) => {
+  try {
+    const site = await Site.update({ site, username, password }, { where: { id } });
+    return site;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const deleteSite = async id => {
+  try {
+    const site = await Site.destroy({ where: { id } });
+    return site;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const addKeyword = async (siteId, keywords) => {
+  try {
+    for (const keyword of keywords) {
+      await Keyword.create({ siteId, keyword });
+    }
+    return true;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const deleteKeyword = async id => {
+  try {
+    const keyword = await Keyword.destroy({ where: { id } });
+    return keyword;
+  } catch (error) {
+    throw error;
+  }
+};
+
+module.exports = { crawl, addSite, listSite, updateSite, deleteSite, addKeyword, deleteKeyword };
