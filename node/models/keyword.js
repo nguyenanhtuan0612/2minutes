@@ -21,9 +21,6 @@ const Keyword = sequelize.define(
     url: {
       type: DataTypes.STRING,
     },
-    categories: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
-    },
     done: {
       type: DataTypes.BOOLEAN,
     },

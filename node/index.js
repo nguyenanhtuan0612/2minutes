@@ -59,7 +59,16 @@ app.get('/listCategories/:id', async (req, res) => {
 
 schedule.scheduleJob('*/1 * * * *', async function () {
   const data = await crawl.getNextKeyword();
-  console.log(data);
+  console.log(data.map(item => item.keyword));
+  //let numCrawl = 0;
+  for (const iterator of data) {
+    try {
+      const rs = await crawl.crawl(iterator);
+      console.log(new Date(), rs);
+    } catch (error) {
+      console.log(error);
+    }
+  }
   console.log(new Date(), 'The answer to life, the universe, and everything!');
 });
 

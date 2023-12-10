@@ -2,7 +2,7 @@ const WPAPI = require('wpapi');
 const { default: axios } = require('axios');
 const { Site } = require('./models/site');
 
-async function createPost(domain, username, password, title, content, status = 'draft') {
+async function createPost(domain, username, password, title, categoryId, content, status = 'draft') {
   const wp = new WPAPI({
     endpoint: `${domain}/wp-json`,
     // This assumes you are using basic auth, as described further below
@@ -16,15 +16,8 @@ async function createPost(domain, username, password, title, content, status = '
     // Post will be created as a draft by default if a specific "status"
     // is not specified
     status,
+    categories: [categoryId],
   });
-
-  //   const data = await axios.post(`${domain}/wp-json/wp/v2/posts`, {
-  //     username,
-  //     password,
-  //     title,
-  //     content,
-  //     status,
-  //   });
 }
 
 async function listCategories(siteId) {

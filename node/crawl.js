@@ -40,36 +40,42 @@ const getNextKeyword = async () => {
 
 const crawl = async keyword => {
   try {
-    const site = await Site.findOne({ where: { site } });
+    const site = await Site.findOne({ where: { id: keyword.siteId } });
     if (!site) throw new Error('Site not found');
 
-    const firstUrl = await getAllResultUrls(keyword);
+    const firstUrl = await getAllResultUrls(keyword.keyword);
     switch (true) {
       case firstUrl.includes('dienmayxanh.com'): {
         const content = await dienmayxanhCom(firstUrl);
-        await createPost(site.site, site.username, site.password, 'Test', content);
+        await createPost(site.site, site.username, site.password, 'Test', keyword.categoryId, content);
+        await Keyword.update({ done: true, error: false, url: firstUrl }, { where: { id: keyword.id } });
         return { keywords: keyword, content: 'Cào thành công', url: firstUrl };
       }
       case firstUrl.includes('disantrangan.vn'): {
         const content = await disantranganVn(firstUrl);
-        await createPost(site.site, site.username, site.password, 'Test', content);
+        await createPost(site.site, site.username, site.password, 'Test', keyword.categoryId, content);
+        await Keyword.update({ done: true, error: false, url: firstUrl }, { where: { id: keyword.id } });
         return { keywords: keyword, content: 'Cào thành công', url: firstUrl };
       }
       case firstUrl.includes('thucphamsieuthi.vn'): {
         const content = await thucphamsieuthiVn(firstUrl);
-        await createPost(site.site, site.username, site.password, 'Test', content);
+        await createPost(site.site, site.username, site.password, 'Test', keyword.categoryId, content);
+        await Keyword.update({ done: true, error: false, url: firstUrl }, { where: { id: keyword.id } });
         return { keywords: keyword, content: 'Cào thành công', url: firstUrl };
       }
       case firstUrl.includes('daubepgiadinh.vn'): {
         const content = await daubepgiadinhVn(firstUrl);
-        await createPost(site.site, site.username, site.password, 'Test', content);
+        await createPost(site.site, site.username, site.password, 'Test', keyword.categoryId, content);
+        await Keyword.update({ done: true, error: false, url: firstUrl }, { where: { id: keyword.id } });
         return { keywords: keyword, content: 'Cào thành công', url: firstUrl };
       }
       default: {
+        await Keyword.update({ error: true, url: firstUrl }, { where: { id: keyword.id } });
         return { keywords: keyword, content: 'Không tìm thấy', url: firstUrl };
       }
     }
   } catch (error) {
+    await Keyword.update({ error: true }, { where: { id: keyword.id } });
     throw error;
   }
 };
