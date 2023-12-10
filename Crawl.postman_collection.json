@@ -158,6 +158,39 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "List Category",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"siteId\": 1,\n    \"keywords\": [\"Cách nấu ăn ngon\", \"Cách dọn bếp\"]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3004/listCategories/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3004",
+					"path": [
+						"listCategories",
+						"1"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
