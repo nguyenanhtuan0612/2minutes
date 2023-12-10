@@ -5,6 +5,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { KeywordsService } from '../../services/keywords.service';
 
 @Component({
   selector: 'app-crawl',
@@ -34,10 +35,55 @@ export class CrawlComponent implements OnInit {
     console.log('submit', this.validateForm.value);
   }
 
-  constructor(private fb: FormBuilder) {}
-  ngOnInit(): void {}
+  listKeyWord: any[] = [];
+  listDone: any[] = [];
+  listUnDone: any[] = [];
+  listError: any[] = [];
 
-  addKeyWord(): void {
-    console.log('addKeyword');
+  constructor(
+    private fb: FormBuilder,
+    private keyWordServices: KeywordsService
+  ) {}
+  ngOnInit(): void {
+    this.getListKeyWords();
+  }
+
+  addKeyWord(event: any): void {
+    console.log(event?.target?.value);
+    const keyword = [];
+    keyword.push(event?.target?.value);
+    const siteId = 1;
+    const body = {
+      siteId: siteId,
+      keywords: [...keyword],
+    };
+    console.log(body);
+    if (event?.target?.value) {
+      event.target.value = '';
+    }
+    // this.keyWordServices.addKeyword(body).subscribe(
+    //   (res) => {
+    //     console.log(res);
+    //   },
+    //   (err) => console.log(err)
+    // );
+  }
+
+  f(event: any) {
+    console.log(event);
+  }
+
+  getListKeyWords() {
+    this.keyWordServices.listKeywords('1').subscribe((res) => {
+      for (const iterator of res.undone) {
+        this.listUnDone.push(iterator.keyword);
+      }
+      for (const iterator of res.done) {
+        this.listDone = iterator.keyword;
+      }
+      for (const iterator of res.error) {
+        this.listError = iterator.keyword;
+      }
+    });
   }
 }

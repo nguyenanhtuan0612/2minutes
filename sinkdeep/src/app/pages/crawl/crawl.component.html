@@ -4,7 +4,6 @@
       <ng-container *ngTemplateOutlet="keyWord"></ng-container>
     </nz-tab>
     <nz-tab nzTitle="Tab 2">Test</nz-tab>
-    <!-- <nz-tab nzTitle="Tab 3">Content of Tab Pane 3</nz-tab> -->
   </nz-tabset>
 </div>
 
@@ -14,6 +13,7 @@
       *ngFor="let category of listCategory"
       [nzHeader]="category.name"
       [nzActive]="category.active"
+      (nzActiveChange)="f($event)"
     >
       <div
         nz-row
@@ -29,48 +29,41 @@
             nzSearch
             [nzAddOnAfter]="suffixIconButton"
           >
-            <input type="text" nz-input />
+            <input type="text" nz-input (keyup.enter)="addKeyWord($event)" />
           </nz-input-group>
           <ng-template #suffixIconButton>
-            <button nz-button nzType="primary" nzSearch (click)="addKeyWord()">
+            <button nz-button nzType="primary" nzSearch>
               <span nz-icon nzType="plus" nzTheme="outline"></span>
             </button>
           </ng-template>
         </div>
         <div nz-col class="gutter-row" nzSpan="12">
           <h4>Danh sách keyword</h4>
-          <textarea nz-input [nzAutosize]="{ minRows: 4 }"> </textarea>
+          <textarea
+            nz-input
+            [nzAutosize]="{ minRows: 4 }"
+            [(ngModel)]="listUnDone"
+          >
+          </textarea>
         </div>
         <div nz-col class="gutter-row" nzSpan="12">
           <h4>Tạo được bài</h4>
-          <textarea nz-input [nzAutosize]="{ minRows: 4 }"></textarea>
+          <!-- <textarea
+            nz-input
+            [nzAutosize]="{ minRows: 4 }"
+            [(ngModel)]="listDone"
+          ></textarea> -->
         </div>
         <div nz-col class="gutter-row" nzSpan="12">
           <h4>Chưa tạo được bài</h4>
-          <textarea nz-input [nzAutosize]="{ minRows: 4 }"></textarea>
+          <textarea
+            nz-input
+            [nzAutosize]="{ minRows: 4 }"
+            [(ngModel)]="listError"
+          >
+          </textarea>
         </div>
       </div>
     </nz-collapse-panel>
   </nz-collapse>
-  <!-- <form
-    nz-form
-    [formGroup]="validateForm"
-    nzNoColon
-    nzLabelAlign="left"
-    (ngSubmit)="submitForm()"
-  >
-    <nz-form-item>
-      <nz-form-label nzRequired nzFor="keyWord" nzSpan="3">
-        Nhập keyword:
-      </nz-form-label>
-      <nz-form-control nzErrorTip="Nhập keyword" nzSpan="8">
-        <input formControlName="keyWord" nz-input id="keyWord" />
-      </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-      <nz-form-control nzSpan="12">
-        <button nz-button nzType="primary">Áp dụng</button>
-      </nz-form-control>
-    </nz-form-item>
-  </form> -->
 </ng-template>
