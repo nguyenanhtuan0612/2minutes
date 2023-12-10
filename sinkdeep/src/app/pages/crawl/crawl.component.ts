@@ -17,10 +17,27 @@ export class CrawlComponent implements OnInit {
     link: ['', [Validators.required]],
   });
 
+  listCategory = [
+    {
+      active: true,
+      name: 'First category',
+      disabled: false,
+    },
+    {
+      active: false,
+      disabled: false,
+      name: 'This is panel header 2',
+    },
+  ];
+
   submitForm(): void {
     console.log('submit', this.validateForm.value);
   }
 
   constructor(private fb: FormBuilder) {}
   ngOnInit(): void {}
+
+  addKeyWord(): void {
+    console.log('addKeyword');
+  }
 }
