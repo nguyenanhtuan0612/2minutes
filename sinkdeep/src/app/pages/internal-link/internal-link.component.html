@@ -1,14 +1,4 @@
-<div>
-  <nz-tabset>
-    <nz-tab nzTitle="Keyword">
-      <ng-container *ngTemplateOutlet="keyWord"></ng-container>
-    </nz-tab>
-    <!-- <nz-tab nzTitle="Tab 2">Content of Tab Pane 2</nz-tab>
-    <nz-tab nzTitle="Tab 3">Content of Tab Pane 3</nz-tab> -->
-  </nz-tabset>
-</div>
-
-<ng-template #keyWord>
+<div class="internal-link">
   <form
     nz-form
     [formGroup]="validateForm"
@@ -18,16 +8,24 @@
   >
     <nz-form-item>
       <nz-form-label nzRequired nzFor="keyWord" nzSpan="3">
-        Nhập keyword:
+        Keyword:
       </nz-form-label>
       <nz-form-control nzErrorTip="Nhập keyword" nzSpan="8">
         <input formControlName="keyWord" nz-input id="keyWord" />
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
-      <nz-form-control nzSpan="12">
-        <button nz-button nzType="primary">Áp dụng</button>
+      <nz-form-label nzRequired nzFor="link" nzSpan="3">
+        Link cần chèn:
+      </nz-form-label>
+      <nz-form-control nzErrorTip="Hãy nhập link" nzSpan="8">
+        <input formControlName="link" nz-input id="link" />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control nzSpan="12" style="text-align: center">
+        <button nz-button nzType="primary">Lưu</button>
       </nz-form-control>
     </nz-form-item>
   </form>
-</ng-template>
+</div>

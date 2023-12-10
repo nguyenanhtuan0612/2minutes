@@ -8,9 +8,9 @@
     [nzTrigger]="null"
   >
     <div class="sidebar-logo">
-      <a href="https://ng.ant.design/" target="_blank">
+      <a routerLink="/">
         <img src="https://ng.ant.design/assets/img/logo.svg" alt="logo" />
-        <h1>Test Crawl</h1>
+        <h1>Test</h1>
       </a>
     </div>
     <ul
@@ -19,14 +19,20 @@
       nzMode="inline"
       [nzInlineCollapsed]="isCollapsed"
     >
-      <li nz-submenu nzOpen nzTitle="Appstore" nzIcon="appstore">
+      <li nz-submenu nzOpen nzTitle="Other" nzIcon="appstore">
         <ul>
-          <li nz-menu-item nzMatchRouter>
-            <a routerLink="/welcome">Welcome</a>
-          </li>
           <li nz-menu-item nzMatchRouter>
             <a routerLink="/crawl">Crawl</a>
           </li>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/internal-link">Internal Link</a>
+          </li>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/alt-image">Alt Image</a>
+          </li>
+          <!-- <li nz-menu-item nzMatchRouter>
+            <a routerLink="/welcome">Welcome</a>
+          </li> -->
         </ul>
       </li>
       <!-- <li nz-submenu nzOpen nzTitle="Form" nzIcon="form">
