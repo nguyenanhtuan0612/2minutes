@@ -24,6 +24,9 @@ const Keyword = sequelize.define(
     done: {
       type: DataTypes.BOOLEAN,
     },
+    error: {
+      type: DataTypes.BOOLEAN,
+    },
     createdAt: {
       type: DataTypes.DATE,
     },

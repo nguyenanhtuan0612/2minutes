@@ -113,9 +113,20 @@ const deleteSite = async id => {
 const addKeyword = async (siteId, keywords) => {
   try {
     for (const keyword of keywords) {
-      await Keyword.create({ siteId, keyword });
+      await Keyword.create({ siteId, keyword, done: false, error: false });
     }
     return true;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const listKeyword = async siteId => {
+  try {
+    const done = await Keyword.findAll({ where: { siteId, done: true } });
+    const undone = await Keyword.findAll({ where: { siteId, done: false, error: false } });
+    const error = await Keyword.findAll({ where: { siteId, error: true } });
+    return { done, undone, error };
   } catch (error) {
     throw error;
   }
@@ -130,4 +141,4 @@ const deleteKeyword = async id => {
   }
 };
 
-module.exports = { crawl, addSite, listSite, updateSite, deleteSite, addKeyword, deleteKeyword, getNextKeyword };
+module.exports = { crawl, addSite, listSite, updateSite, deleteSite, addKeyword, deleteKeyword, getNextKeyword, listKeyword };
