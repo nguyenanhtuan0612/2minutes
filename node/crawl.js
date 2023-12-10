@@ -121,11 +121,11 @@ const addKeyword = async (siteId, keywords, categoryId) => {
   }
 };
 
-const listKeyword = async siteId => {
+const listKeyword = async (siteId, categoryId) => {
   try {
-    const done = await Keyword.findAll({ where: { siteId, done: true } });
-    const undone = await Keyword.findAll({ where: { siteId, done: false, error: false } });
-    const error = await Keyword.findAll({ where: { siteId, error: true } });
+    const done = await Keyword.findAll({ where: { siteId, categoryId, done: true } });
+    const undone = await Keyword.findAll({ where: { siteId, categoryId, done: false, error: false } });
+    const error = await Keyword.findAll({ where: { siteId, categoryId, error: true } });
     return { done, undone, error };
   } catch (error) {
     throw error;

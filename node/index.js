@@ -47,8 +47,8 @@ app.delete('/deleteKeyword/:id', async (req, res) => {
   return res.json(data);
 });
 
-app.get('/listKeyword/:id', async (req, res) => {
-  const data = await crawl.listKeyword(req.params.id);
+app.get('/listKeyword/:id/:cateId', async (req, res) => {
+  const data = await crawl.listKeyword(req.params.id, req.params.cateId);
   return res.json(data);
 });
 
