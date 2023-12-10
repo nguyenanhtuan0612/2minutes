@@ -110,10 +110,10 @@ const deleteSite = async id => {
   }
 };
 
-const addKeyword = async (siteId, keywords) => {
+const addKeyword = async (siteId, keywords, categoryId) => {
   try {
     for (const keyword of keywords) {
-      await Keyword.create({ siteId, keyword, done: false, error: false });
+      await Keyword.create({ siteId, keyword, categoryId, done: false, error: false });
     }
     return true;
   } catch (error) {

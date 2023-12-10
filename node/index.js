@@ -5,6 +5,7 @@ const crawl = require('./crawl');
 const bodyParser = require('body-parser');
 const { dbConnect } = require('./sequelize');
 const schedule = require('node-schedule');
+const wpapi = require('./wpapi');
 
 // setup the port our backend app will run on
 const PORT = 3004;
@@ -37,7 +38,7 @@ app.delete('/deleteSite', async (req, res) => {
 });
 
 app.post('/addKeyword', async (req, res) => {
-  const data = await crawl.addKeyword(req.body.siteId, req.body.keywords);
+  const data = await crawl.addKeyword(req.body.siteId, req.body.keywords, req.body.categoryId);
   return res.json(data);
 });
 
@@ -48,6 +49,11 @@ app.delete('/deleteKeyword/:id', async (req, res) => {
 
 app.get('/listKeyword/:id', async (req, res) => {
   const data = await crawl.listKeyword(req.params.id);
+  return res.json(data);
+});
+
+app.get('/listCategories/:id', async (req, res) => {
+  const data = await wpapi.listCategories(req.params.id);
   return res.json(data);
 });
 

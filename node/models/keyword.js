@@ -12,6 +12,9 @@ const Keyword = sequelize.define(
     siteId: {
       type: DataTypes.INTEGER,
     },
+    categoryId: {
+      type: DataTypes.INTEGER,
+    },
     keyword: {
       type: DataTypes.STRING,
     },

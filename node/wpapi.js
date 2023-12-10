@@ -1,5 +1,6 @@
 const WPAPI = require('wpapi');
 const { default: axios } = require('axios');
+const { Site } = require('./models/site');
 
 async function createPost(domain, username, password, title, content, status = 'draft') {
   const wp = new WPAPI({
@@ -26,4 +27,17 @@ async function createPost(domain, username, password, title, content, status = '
   //   });
 }
 
-module.exports = { createPost };
+async function listCategories(siteId) {
+  const site = await Site.findOne({ where: { id: siteId } });
+  if (!site) throw new Error('Site not found');
+  const wp = new WPAPI({
+    endpoint: `${site.site}/wp-json`,
+    // This assumes you are using basic auth, as described further below
+    username: site.username,
+    password: site.password,
+  });
+  const categories = await wp.categories();
+  return categories;
+}
+
+module.exports = { createPost, listCategories };
