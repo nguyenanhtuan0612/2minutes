@@ -12,14 +12,14 @@ const Keyword = sequelize.define(
     siteId: {
       type: DataTypes.INTEGER,
     },
+    categoryId: {
+      type: DataTypes.INTEGER,
+    },
     keyword: {
       type: DataTypes.STRING,
     },
     url: {
       type: DataTypes.STRING,
-    },
-    categories: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
     },
     done: {
       type: DataTypes.BOOLEAN,
