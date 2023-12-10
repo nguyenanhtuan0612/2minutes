@@ -7,7 +7,7 @@ const { dbConnect } = require('./sequelize');
 const schedule = require('node-schedule');
 
 // setup the port our backend app will run on
-const PORT = 3000;
+const PORT = 3004;
 const NEW_MESSAGE_EVENT = 'new-message-event';
 
 const app = express();
@@ -41,15 +41,20 @@ app.post('/addKeyword', async (req, res) => {
   return res.json(data);
 });
 
-app.delete('/deleteKeyword', async (req, res) => {
-  const data = await crawl.deleteKeyword(req.query.id);
+app.delete('/deleteKeyword/:id', async (req, res) => {
+  const data = await crawl.deleteKeyword(req.params.id);
+  return res.json(data);
+});
+
+app.get('/listKeyword/:id', async (req, res) => {
+  const data = await crawl.listKeyword(req.params.id);
   return res.json(data);
 });
 
 schedule.scheduleJob('*/1 * * * *', async function () {
   const data = await crawl.getNextKeyword();
   console.log(data);
-  console.log('The answer to life, the universe, and everything!');
+  console.log(new Date(), 'The answer to life, the universe, and everything!');
 });
 
 server.listen(PORT, async () => {

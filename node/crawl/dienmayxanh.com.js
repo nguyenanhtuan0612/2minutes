@@ -32,12 +32,17 @@ async function dienmayxanhCom(url) {
     // Extract the content from the HTML using CSS selectors
     $('div.detail-content').each((index, element) => {
       const elementHtml = $(element).html();
+
+      //Xóa định danh web cũ
       const modifiedHtml1 = elementHtml.replace(/Điện máy XANH/gi, match => {
         return match.replace(/Điện máy XANH/gi, '');
       });
+
+      //Xóa href trong thẻ a
       const modifiedHtml2 = modifiedHtml1.replace(/<a\b[^>]*>/gi, match => {
         return match.replace(/href="[^"]*"/gi, '');
       });
+
       contentArray.push(`<${element.name}>${modifiedHtml2}</${element.name}>`);
     });
     const contentHtml = contentArray.join('');
