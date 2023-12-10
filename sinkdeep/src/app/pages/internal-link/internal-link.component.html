@@ -1,0 +1,31 @@
+<div class="internal-link">
+  <form
+    nz-form
+    [formGroup]="validateForm"
+    nzNoColon
+    nzLabelAlign="left"
+    (ngSubmit)="submitForm()"
+  >
+    <nz-form-item>
+      <nz-form-label nzRequired nzFor="keyWord" nzSpan="3">
+        Keyword:
+      </nz-form-label>
+      <nz-form-control nzErrorTip="Nhập keyword" nzSpan="8">
+        <input formControlName="keyWord" nz-input id="keyWord" />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label nzRequired nzFor="link" nzSpan="3">
+        Link cần chèn:
+      </nz-form-label>
+      <nz-form-control nzErrorTip="Hãy nhập link" nzSpan="8">
+        <input formControlName="link" nz-input id="link" />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control nzSpan="12" style="text-align: center">
+        <button nz-button nzType="primary">Lưu</button>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</div>

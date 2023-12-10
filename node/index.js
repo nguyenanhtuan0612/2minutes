@@ -26,8 +26,8 @@ app.get('/listSite', async (req, res) => {
   return res.json(data);
 });
 
-app.put('/updateSite', async (req, res) => {
-  const data = await crawl.updateSite(req.body.id, req.body.site, req.body.username, req.body.password);
+app.put('/updateSite/:id', async (req, res) => {
+  const data = await crawl.updateSite(req.params.id, req.body.site, req.body.username, req.body.password);
   return res.json(data);
 });
 
